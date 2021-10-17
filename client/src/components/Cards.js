@@ -61,7 +61,7 @@ export default function Cards() {
                         </CardActionArea>
                         <CardActions>
                             <Button size="small" color="primary" justify="center">
-                                Github
+                            <a href="https://github.com/eishabar" target="_blank" rel="noopener noreferrer">Github</a>
                             </Button>
                         </CardActions>
                     </Card>
@@ -71,21 +71,21 @@ export default function Cards() {
                         <CardActionArea>
                             <CardMedia
                                 className={classes.media}
-                                image="https://source.unsplash.com/random"
-                                title="INSERT NAME HERE"
+                                image="https://www.jonesday.com/-/media/files/publications/2019/05/when-coding-is-criminal/when-coding-is-criminal.jpg?h=800&w=1600&la=en&hash=5522AA91198A168017C511FCBE77E201"
+                                title="Tanvir Ahmed"
                             />
                             <CardContent>
                                 <Typography gutterBottom variant="h5" component="h2">
-                                    -- INSERT NAME HERE --
+                                Tanvir Ahmed
                                 </Typography>
                                 <Typography variant="body2" color="textSecondary" component="p">
-                                    -- INSERT DESCRIPTION HERE --
+                                Junior Computer Science Student at Wayne State University. Academic Focus: Full Stack, Mobile Application Development, Machine Learning, and Data Scientist.
                                 </Typography>
                             </CardContent>
                         </CardActionArea>
                         <CardActions>
                             <Button size="small" color="primary" justify="center">
-                                -- Any Link Here --
+                            <a href="https://github.com/tanvirahmed725" target="_blank" rel="noopener noreferrer">Github</a>
                             </Button>
                         </CardActions>
                     </Card>
@@ -111,7 +111,7 @@ export default function Cards() {
                         </CardActionArea>
                         <CardActions>
                             <Button size="small" color="primary" justify="center">
-                                Github
+                            <a href="https://github.com/CalebObsCode" target="_blank" rel="noopener noreferrer">Github</a>
                             </Button>
 
                         </CardActions>
@@ -142,7 +142,7 @@ export default function Cards() {
                         </CardActionArea>
                         <CardActions>
                             <Button size="small" color="primary" justify="center">
-                               Github
+                            <a href="https://github.com/gj6645" target="_blank" rel="noopener noreferrer">Github</a>
                             </Button>
                         </CardActions>
                     </Card>
@@ -167,7 +167,7 @@ export default function Cards() {
                         </CardActionArea>
                         <CardActions>
                             <Button size="small" color="primary" justify="center">
-                                Github
+                            <a href="https://github.com/chrisgumieny" target="_blank" rel="noopener noreferrer">Github</a>
                             </Button>
                         </CardActions>
                     </Card>
