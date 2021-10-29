@@ -64,6 +64,8 @@ export default function Main() {
                 <a href="/sample">Click here to see sample on how api is working with UI</a>
             </div>
 
+            <h1> HEADER setTitle</h1>
+
 
 
             {/* pop up form */}
