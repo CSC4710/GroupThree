@@ -83,7 +83,7 @@ export default function SideBar() {
                 <Toolbar />
                 <Toolbar />
                 <List>
-                    <ListItem button component={Link} href="/usermanual">
+                    <ListItem button component={Link} href="https://github.com/CSC4710/GroupThree/blob/main/user%20manual/User%20manual.pdf">
                         <ListItemText primary="User Manual" />
                     </ListItem>
                 </List>
