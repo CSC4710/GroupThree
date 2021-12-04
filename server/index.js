@@ -3,7 +3,6 @@ const app = express();
 const mysql = require('mysql2')
 const cors = require('cors');
 
-
 const PORT = 3001;
 
 app.use(cors());
@@ -39,6 +38,7 @@ const db = mysql.createPool({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME
 });
+
 
 
 // Handle DB Crashing and restart it
@@ -171,7 +171,7 @@ app.get('/api/getTasks', (req, res) => {
 
 // GET API to get all tasks due today from database
 app.get('/api/getTasksToday', (req, res) => {
-    db.query('SELECT * FROM tasks WHERE tasks_due_date = curdate() AND tasks_status = "Active" ORDER BY tasks_priority ASC', 
+    db.query('SELECT * FROM tasks WHERE tasks_due_date = DATE(CONVERT_TZ(curdate(),\'+00:00\',\'+04:00\'))  AND tasks_status = "Active" ORDER BY tasks_priority ASC',
     (err, rows, fields) => {
         if (!err) {
             
@@ -186,16 +186,15 @@ app.get('/api/getTasksToday', (req, res) => {
 });
 
 
+
+
 // GET API to get all overdue tasks from database
 app.get('/api/getOverdueTasks', function(req, res, next) {
-    db.query('SELECT * FROM tasks WHERE tasks_due_date < curdate() AND tasks_status = "Active" ORDER BY tasks_priority ASC',
+    db.query('SELECT * FROM tasks WHERE tasks_due_date < DATE(CONVERT_TZ(curdate(),\'+00:00\',\'+04:00\')) AND tasks_status = "Active" ORDER BY tasks_priority ASC',
     (err, rows, fields) => {
         if (!err) {
-            
             res.header("Content-Type",'application/json');
-            
             res.type('json').send(JSON.stringify(rows, null, 2) + '\n');
-        
         } else {
             console.log(err);
         }
@@ -208,11 +207,8 @@ app.get('/api/getOverdueTasks', function(req, res, next) {
 app.get('/api/getCategories', (req, res) => {
     db.query('SELECT * FROM categories', (err, rows, fields) => {
         if (!err) {
-
             res.header("Content-Type",'application/json');
-
             res.type('json').send(JSON.stringify(rows, null, 2) + '\n');
-
         } else {
             console.log(err);
         }
@@ -224,7 +220,6 @@ app.get('/api/getCategories', (req, res) => {
 app.get('/api/getTasks/:tasks_categories', (req, res) => {
     const tasks_categories = req.params.tasks_categories;
     db.query('SELECT * FROM tasks WHERE tasks_categories = ? ORDER BY tasks_priority ASC, tasks_due_date ASC', [tasks_categories], (err, result) => {
-        
         if (!err){
             res.header("Content-Type",'application/json');
             res.type('json').send(JSON.stringify(result, null, 2) + '\n');
@@ -240,7 +235,6 @@ app.get('/api/getTasks/:tasks_categories', (req, res) => {
 app.get('/api/getTasksByPriority/:tasks_priority', (req, res) => {
     const tasks_priority = req.params.tasks_priority;
     db.query('SELECT * FROM tasks WHERE tasks_priority = ?', [tasks_priority], (err, result) => {
-        
         if (!err){
             res.header("Content-Type",'application/json');
             res.type('json').send(JSON.stringify(result, null, 2) + '\n');
@@ -258,11 +252,8 @@ app.get('/api/getCompletedTasks', (req, res) => {
     db.query('SELECT * FROM tasks WHERE tasks_status = "Completed" ORDER BY tasks_due_date ASC',
         (err, rows, fields) => {
             if (!err) {
-
                 res.header("Content-Type", 'application/json');
-
                 res.type('json').send(JSON.stringify(rows, null, 2) + '\n');
-
             } else {
                 console.log(err);
             }
@@ -286,8 +277,6 @@ app.get('/api/getTasksByDueDate/:tasks_due_date', (req, res) => {
     
 
 
-
-
 /*
  *******************************************
  ********* UPDATE CRUD API HERE **************
@@ -298,12 +287,13 @@ app.get('/api/getTasksByDueDate/:tasks_due_date', (req, res) => {
 app.put('/api/updateTask/:Tasks_id', (req, res) => {
     const Tasks_id = req.params.Tasks_id;
     const tasks_description = req.body.tasks_description;
+    const tasks_categories = req.body.tasks_categories;
     const Categories_id = req.body.Categories_id;
     const tasks_priority = req.body.tasks_priority;
     const tasks_status = req.body.tasks_status;
     const tasks_due_date = req.body.tasks_due_date;
-    db.query('UPDATE tasks SET tasks_description = ?, Categories_id = ?, tasks_priority = ?, tasks_status = ?, tasks_due_date = ? WHERE Tasks_id = ?',
-    [tasks_description, Categories_id, tasks_priority, tasks_status, tasks_due_date, Tasks_id],
+    db.query('UPDATE tasks SET tasks_description = ?, Categories_id = ?, tasks_categories = ? tasks_priority = ?, tasks_status = ?, tasks_due_date = ? WHERE Tasks_id = ?',
+    [tasks_description, Categories_id, tasks_priority, tasks_categories, tasks_status, tasks_due_date, Tasks_id],
     (err, result) => {
         if (err) throw err;
         console.log(result);
@@ -316,12 +306,13 @@ app.put('/api/updateTask/:Tasks_id', (req, res) => {
 app.put('/api/updateTask', (req, res) => {
     const Tasks_id = req.body.Tasks_id;
     const tasks_description = req.body.tasks_description;
-    const Categories_id = req.body.Categories_id;
+    const tasks_categories = req.body.tasks_categories;
+    //const Categories_id = req.body.Categories_id;
     const tasks_priority = req.body.tasks_priority;
     const tasks_status = req.body.tasks_status;
     const tasks_due_date = req.body.tasks_due_date;
-    db.query('UPDATE tasks SET tasks_description = ?, Categories_id = ?, tasks_priority = ?, tasks_status = ?, tasks_due_date = ? WHERE Tasks_id = ?',
-    [tasks_description, Categories_id, tasks_priority, tasks_status, tasks_due_date, Tasks_id],
+    db.query('UPDATE tasks SET tasks_description = ?, tasks_categories = ?, tasks_priority = ?, tasks_status = ?, tasks_due_date = ? WHERE Tasks_id = ?',
+    [tasks_description, tasks_categories, tasks_priority, tasks_status, tasks_due_date, Tasks_id],
     (err, result) => {
         if (err) throw err;
         console.log(result);
@@ -329,6 +320,7 @@ app.put('/api/updateTask', (req, res) => {
     }
     );
 });
+    
     
 
 // PUT API to update a category in database
@@ -396,7 +388,6 @@ app.delete('/api/deleteCategory/:Categories_id', (req, res) => {
         }
     });
 });
-
 
 
 
