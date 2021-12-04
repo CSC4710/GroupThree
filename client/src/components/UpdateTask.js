@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 
 // Form
+import "../pages/Main.css"
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import Box from '@mui/material/Box';
@@ -12,11 +13,6 @@ import DialogActions from '@mui/material/DialogActions';
 import Stack from '@mui/material/Stack';
 import InputLabel from '@mui/material/InputLabel';
 import 'date-fns'
-import DateMomentUtils from '@date-io/moment';
-import {
-    DatePicker,
-    MuiPickersUtilsProvider,
-} from '@material-ui/pickers';
 import FormControl from '@mui/material/FormControl';
 import FormGroup from '@mui/material/FormGroup';
 import { MenuItem, Select } from "@mui/material";
@@ -57,6 +53,29 @@ export default function UpdateTask(props) {
         setNotify({ isOpen: true, message: "Task was updated successfully", type: "success" });
     };
 
+    // Errors
+    const [error, setError] = React.useState(false);
+
+    const handleSubmit = () => {
+        if (tasks_description === "")
+        {
+            setError(true);
+            return;
+        }
+        else if (tasks_due_date === "")
+        {
+            setError(true);
+            return;
+        }
+        else
+        {
+            props.updateTask(tasks_description, tasks_due_date, tasks_priority, tasks_categories, tasks_status);
+            handleClose();
+            handleNotify();
+            reload();
+        }
+    }
+
     const {tasks_description, setTasks_description} = props;
     const {tasks_due_date, setTasks_due_date} = props;
     const {tasks_priority, setTasks_priority} = props;
@@ -96,7 +115,7 @@ export default function UpdateTask(props) {
                     component="form"
                     sx={{
                         width: 500,
-                        height: 450,
+                        height: 525,
                     }}
                 >
                     <Stack spacing={3}>
@@ -107,7 +126,7 @@ export default function UpdateTask(props) {
                                 <FormControl>
                                     <TextField
                                         id="taskDescription"
-                                        // label="taskDescription"
+                                        error={error}
                                         required
                                         type="text"
                                         defaultValue={tasks_description}
@@ -123,10 +142,11 @@ export default function UpdateTask(props) {
                             <InputLabel required id="date">
                                 Due Date
                             </InputLabel>
-                            <MuiPickersUtilsProvider utils={DateMomentUtils}>
+                            {/*<MuiPickersUtilsProvider utils={DateMomentUtils}>
                                 <DatePicker
                                     clearable
                                     id="date-picker"
+                                    error={error}
                                     format="YYYY-MM-DD"
                                     label="Choose date"
                                     value={tasks_due_date}
@@ -135,7 +155,18 @@ export default function UpdateTask(props) {
                                         <TextField {...params} helperText="Select Due Date" />
                                     )}
                                 />
-                            </MuiPickersUtilsProvider>
+                            </MuiPickersUtilsProvider>*/}
+                            <TextField
+                                id="date-picker"
+                                error={error}
+                                required
+                                format="YYYY-MM-DD"
+                                type="date"
+                                value={tasks_due_date}
+                                onChange={(event) => {
+                                    setTasks_due_date(event.target.value);
+                                }}
+                            />
                         </Stack>
                         {/* Categories*/}
                         {/* Create a dropdown for categories*/}
@@ -150,9 +181,13 @@ export default function UpdateTask(props) {
                                     id="categories"
                                     defaultValue={tasks_categories}
                                     onChange={(event) => {
-                                        setTasks_categories(event.target.value);
+                                        if (event.target.value === "None")
+                                            setTasks_categories("");
+                                        else
+                                            setTasks_categories(event.target.value);
                                     }}
                                 >
+                                    <MenuItem value="None">None</MenuItem>
                                     {categories.map((category) => (
                                         <MenuItem value={category.tasks_categories}>{category.tasks_categories}</MenuItem>
                                     ))}
@@ -218,10 +253,7 @@ export default function UpdateTask(props) {
             </Button>
             <Button
                 onClick={() => {
-                    props.updateTask(tasks_description, tasks_due_date, tasks_priority, tasks_categories, tasks_status);
-                    handleClose();
-                    handleNotify();
-                    reload();
+                    handleSubmit();
                 }}
                 variant="contained">
                 <span class="material-icons">add</span>

@@ -184,7 +184,7 @@ export default function Main() {
                                     component="form"
                                     sx={{
                                         width: 500,
-                                        height: 450,
+                                        height: 525,
                                     }}
                                 >
                                     <Stack spacing={3}>
