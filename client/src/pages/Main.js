@@ -37,7 +37,7 @@ import { MenuItem, Select } from "@mui/material";
 export default function Main() {
     const [open, setOpen] = React.useState(false);
     const [tasks_description, setTasks_description] = React.useState("");
-    const [tasks_due_date, setTasks_due_date] = React.useState(null);
+    const [tasks_due_date, setTasks_due_date] = React.useState('');
     const [tasks_priority, setTasks_priority] = React.useState('');
     const [tasks_categories, setTasks_categories] = React.useState('');
     const [tasks_status, setTasks_status] = React.useState("Active");
@@ -51,7 +51,7 @@ export default function Main() {
             setError(true);
             return;
         }
-        else if (tasks_due_date === null) {
+        else if (tasks_due_date === "") {
             setError(true);
             return;
         }
@@ -141,8 +141,9 @@ export default function Main() {
                     <Box
                         component="main"
                         sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
-                    >
-                        <Toolbar />
+                    > <Toolbar />
+                        <h3> Home </h3>
+                        <hr></hr>
                         <br></br>
 
                         {/* Button for add new task */}
@@ -157,16 +158,17 @@ export default function Main() {
                         <Toolbar />
 
                         {/* First Data Table  */}
-                        <h3>Today's Tasks:</h3>
-                        <hr></hr>
+                        <h4>Today's Tasks:</h4>
+
                         <TodayTable />
 
                         {/* space between both tables */}
                         <Toolbar />
 
                         {/* Second Data Table */}
-                        <h3> Overdue Tasks:</h3>
-                        <hr></hr>
+                        <h4> Overdue Tasks:</h4>
+
+
 
                         <OverdueTable />
 
@@ -179,123 +181,133 @@ export default function Main() {
                         <DialogContent>
 
                             <div className="text-center">
-                                    <Box
-                                        margin="auto"
-                                        alignItems="center"
-                                        justifyContent="center"
-                                        className="text-center"
-                                        component="form"
-                                        sx={{
-                                            width: 500,
-                                            height: 450,
-                                        }}
-                                    >
-                                        <Stack spacing={3}>
-                                            {/* task description */}
-                                            <Stack>
-                                                <FormGroup>
-                                                    <InputLabel required id="taskDescription">Task Description</InputLabel><br></br>
-                                                    <FormControl>
-                                                        <TextField
-                                                            error
-                                                            id="taskDescription"
-                                                            // label="taskDescription"
-                                                            error={error}
-                                                            required
-                                                            type="text"
-                                                            placeholder=" Task Description"
-                                                            onChange={(event) => {
-                                                                setTasks_description(event.target.value);
-                                                            }}
-                                                        />
-                                                    </FormControl>
-                                                </FormGroup>
-                                            </Stack>
-
-                                            {/* date and time  */}
-                                            <Stack>
-                                                <InputLabel required id="date">
-                                                    Due Date
-                                                </InputLabel>
-                                                <MuiPickersUtilsProvider utils={DateMomentUtils}>
-                                                    <DatePicker
-
-                                                        clearable
-                                                        error={error}
-                                                        id="date-picker"
-                                                        format="YYYY-MM-DD"
-                                                        label="Choose date"
-                                                        value={tasks_due_date}
-                                                        onChange={(newValue) => (newValue ? setTasks_due_date(newValue.format("YYYY-MM-DD")) : setTasks_due_date(null))}
-                                                        renderInput={(params) => (
-                                                            <TextField {...params} helperText="Select Due Date" />
-                                                        )}
-                                                    />
-                                                </MuiPickersUtilsProvider>
-                                            </Stack>
-
-                                            {/* Categories*/}
-                                            {/* Create a dropdown for categories*/}
-                                            <Stack>
-                                                <InputLabel>
-                                                    Pick a Category (Optional)
-                                                    <br></br>
-                                                </InputLabel>
+                                <Box
+                                    margin="auto"
+                                    alignItems="center"
+                                    justifyContent="center"
+                                    className="text-center"
+                                    component="form"
+                                    sx={{
+                                        width: 500,
+                                        height: 450,
+                                    }}
+                                >
+                                    <Stack spacing={3}>
+                                        {/* task description */}
+                                        <Stack>
+                                            <FormGroup>
+                                                <InputLabel required id="taskDescription">Task Description</InputLabel><br></br>
                                                 <FormControl>
-                                                    <Select
-                                                        labelId="categories"
-                                                        id="categories"
-                                                        placeholder="Pick a Categories"
-                                                        value={tasks_categories}
+                                                    <TextField
+                                                        id="taskDescription"
+                                                        error={error}
+                                                        required
+                                                        type="text"
+                                                        placeholder=" Task Description"
                                                         onChange={(event) => {
-                                                            setTasks_categories(event.target.value);
+                                                            setTasks_description(event.target.value);
                                                         }}
-                                                    >
-                                                        {categories.map((category) => (
-                                                            <MenuItem value={category.tasks_categories}>{category.tasks_categories}</MenuItem>
-                                                        ))}
-                                                    </Select>
+                                                    />
                                                 </FormControl>
-                                            </Stack>
-
-
-                                            {/* priority */}
-                                            <Stack>
-                                                <InputLabel id="priority">Priority Level (Optional) </InputLabel>
-                                                <Slider
-                                                    aria-label="Restricted priorities"
-                                                    defaultValue={5}
-                                                    step={null}
-                                                    marks={priorityOptions}
-                                                    min={1}
-                                                    max={5}
-                                                    onChange={(event) => {
-                                                        setTasks_priority("Priority " + event.target.value);
-                                                    }}
-                                                />
-                                            </Stack>
-
-                                            {/* status */}
-                                            <Stack alignItems="center">
-                                                <InputLabel id="status">Status</InputLabel><br></br>
-                                                <ButtonGroup
-                                                    id="status_select"
-                                                    value={tasks_status}
-                                                    label="status"
-                                                    onClick={(event) => {
-                                                        setTasks_status("Active");
-                                                    }}
-                                                    placeholder="status"
-                                                    display="block"
-                                                >
-                                                    <Button variant={"contained"} value={"Active"}>Active</Button>
-                                                    <Button disabled value={"Completed"}>Completed</Button>
-                                                </ButtonGroup>
-                                                <br></br>
-                                            </Stack>
+                                            </FormGroup>
                                         </Stack>
-                                    </Box >
-                               
+
+                                        {/* date and time  */}
+                                        <Stack>
+                                            <InputLabel required id="date">
+                                                Due Date
+                                            </InputLabel>
+                                            {/* <MuiPickersUtilsProvider utils={DateMomentUtils}>
+                                                <DatePicker
+                                                    clearable
+                                                    error={error}
+                                                    id="date-picker"
+                                                    format="YYYY-MM-DD"
+                                                    label="Choose date"
+                                                    value={tasks_due_date}
+                                                    onChange={(newValue) => (newValue ? setTasks_due_date(newValue.format("YYYY-MM-DD")) : setTasks_due_date(null))}
+                                                    renderInput={(params) => (
+                                                        <TextField {...params} helperText="Select Due Date" />
+                                                    )}
+                                                />
+                                            </MuiPickersUtilsProvider> */}
+
+                                            <TextField
+                                                id="date-picker"
+                                                error={error}
+                                                required
+                                                format="YYYY-MM-DD"
+                                                type="date"
+                                                value={tasks_due_date}
+                                                placeholder=" Select Due Date"
+                                                onChange={(event) => {
+                                                    setTasks_due_date(event.target.value);
+                                                }}
+                                            />
+                                        </Stack>
+
+                                        {/* Categories*/}
+                                        {/* Create a dropdown for categories*/}
+                                        <Stack>
+                                            <InputLabel>
+                                                Pick a Category (Optional)
+                                                <br></br>
+                                            </InputLabel>
+                                            <FormControl>
+                                                <Select
+                                                    labelId="categories"
+                                                    id="categories"
+                                                    placeholder="Pick a Categories"
+                                                    value={tasks_categories}
+                                                    onChange={(event) => {
+                                                        setTasks_categories(event.target.value);
+                                                    }}
+                                                >
+                                                    {categories.map((category) => (
+                                                        <MenuItem value={category.tasks_categories}>{category.tasks_categories}</MenuItem>
+                                                    ))}
+                                                </Select>
+                                            </FormControl>
+                                        </Stack>
+
+
+                                        {/* priority */}
+                                        <Stack>
+                                            <InputLabel id="priority">Priority Level (Optional) </InputLabel>
+                                            <Slider
+                                                aria-label="Restricted priorities"
+                                                defaultValue={5}
+                                                step={null}
+                                                marks={priorityOptions}
+                                                min={1}
+                                                max={5}
+                                                onChange={(event) => {
+                                                    setTasks_priority("Priority " + event.target.value);
+                                                }}
+                                            />
+                                        </Stack>
+
+                                        {/* status */}
+                                        <Stack alignItems="center">
+                                            <InputLabel id="status">Status</InputLabel><br></br>
+                                            <ButtonGroup
+                                                id="status_select"
+                                                value={tasks_status}
+                                                label="status"
+                                                onClick={(event) => {
+                                                    setTasks_status("Active");
+                                                }}
+                                                placeholder="status"
+                                                display="block"
+                                            >
+                                                <Button variant={"contained"} value={"Active"}>Active</Button>
+                                                <Button disabled value={"Completed"}>Completed</Button>
+                                            </ButtonGroup>
+                                            <br></br>
+                                        </Stack>
+                                    </Stack>
+                                </Box >
+
                             </div >
                         </DialogContent>
 
@@ -311,6 +323,7 @@ export default function Main() {
                             </Button>
                             <Button
                                 variant="contained"
+                                height="75px"
                                 onClick={() => {
                                     handleSubmit();
 

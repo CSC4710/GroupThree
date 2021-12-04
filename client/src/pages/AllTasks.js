@@ -7,7 +7,7 @@ import AllTasksTable from '../components/tables/AllTasksTable';
 export default function AllTasks() {
 
 
-    return(
+    return (
         <Box sx={{ display: 'flex' }}>
             {/* header */}
             <Header />
@@ -19,8 +19,8 @@ export default function AllTasks() {
             >
                 <Toolbar />
                 <h3>All Tasks</h3>
-                <hr></hr>
-                <AllTasksTable/>
+                
+                <AllTasksTable />
             </Box>
         </Box >
 
