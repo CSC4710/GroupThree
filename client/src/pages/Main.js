@@ -36,9 +36,33 @@ import { MenuItem, Select } from "@mui/material";
 
 export default function Main() {
     const [open, setOpen] = React.useState(false);
-
+    const [tasks_description, setTasks_description] = React.useState("");
+    const [tasks_due_date, setTasks_due_date] = React.useState('');
+    const [tasks_priority, setTasks_priority] = React.useState('');
+    const [tasks_categories, setTasks_categories] = React.useState('');
+    const [tasks_status, setTasks_status] = React.useState("Active");
     //Notifications
     const [notify, setNotify] = useState({ isOpen: false, message: "", type: "" });
+    //error
+    const [error, setError] = React.useState(false);
+
+    const handleSubmit = () => {
+        if (tasks_description === "") {
+            setError(true);
+            return;
+        }
+        else if (tasks_due_date === "") {
+            setError(true);
+            return;
+        }
+        else {
+            setError(false);
+            createTask();
+            handleClose();
+            handleNotify();
+            reload();
+        }
+    }
 
     const handleNotify = () => {
         setNotify({ isOpen: true, message: "Form was Submitted Successfully", type: "success" });
@@ -59,12 +83,6 @@ export default function Main() {
     const cancelReload = () => {
         setTimeout(() => { window.location.reload(false); }, 1);
     }
-
-    const [tasks_description, setTasks_description] = React.useState("");
-    const [tasks_due_date, setTasks_due_date] = React.useState(null);
-    const [tasks_priority, setTasks_priority] = React.useState('');
-    const [tasks_categories, setTasks_categories] = React.useState('');
-    const [tasks_status, setTasks_status] = React.useState("Active");
 
     // Create function to call API
     const createTask = () => {
@@ -91,10 +109,10 @@ export default function Main() {
             console.log(categories);
         }
         )
-        .catch(err => {
-            console.log(err);
-        }
-        )
+            .catch(err => {
+                console.log(err);
+            }
+            )
     }
 
     // Labels and values for the priority slider
@@ -104,13 +122,9 @@ export default function Main() {
         { value: 3, label: '3' },
         { value: 4, label: '4' },
         { value: 5, label: 'None' }
-      ];
-
-
-      
+    ];
 
     return (
-
         <>
             <div className="text-center">
                 <head>
@@ -125,50 +139,47 @@ export default function Main() {
                     <SideBarMain />
 
                     <Box
-
                         component="main"
                         sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
-                    >
-                        <Toolbar />
+                    > <Toolbar />
+                        <h3> Home </h3>
+                        <hr></hr>
                         <br></br>
 
                         {/* Button for add new task */}
                         <Button variant="contained" onClick={() => {
-                                    handleClickOpen();
-                                    getCategories();
-                                }}>
-                            <span class="material-icons" style={{padding: "1px"}} >add</span>
+                            handleClickOpen();
+                            getCategories();
+                        }}>
+                            <span class="material-icons" style={{ padding: "1px" }} >add</span>
                             Add New Task
                         </Button>
 
                         <Toolbar />
 
                         {/* First Data Table  */}
-                        <h3>Today's Tasks:</h3>
-                        <hr></hr>
+                        <h4>Today's Tasks:</h4>
+
                         <TodayTable />
 
                         {/* space between both tables */}
                         <Toolbar />
 
                         {/* Second Data Table */}
-                        <h3> Overdue Tasks:</h3>
-                        <hr></hr>
-                        
+                        <h4> Overdue Tasks:</h4>
+
+
+
                         <OverdueTable />
 
                     </Box>
                 </Box>
 
-                {/* <div className="text-center">
-                <a href="/sample">Click here to see sample on how api is working with UI</a>
-                </div> */}
-
-                {/* pop up form */}
                 <div className="text-center">
                     <Dialog open={open} onClose={handleClose}>
                         <DialogTitle><h3>New Task</h3></DialogTitle>
                         <DialogContent>
+
                             <div className="text-center">
                                 <Box
                                     margin="auto"
@@ -189,7 +200,7 @@ export default function Main() {
                                                 <FormControl>
                                                     <TextField
                                                         id="taskDescription"
-                                                        // label="taskDescription"
+                                                        error={error}
                                                         required
                                                         type="text"
                                                         placeholder=" Task Description"
@@ -201,15 +212,15 @@ export default function Main() {
                                             </FormGroup>
                                         </Stack>
 
-
                                         {/* date and time  */}
                                         <Stack>
                                             <InputLabel required id="date">
                                                 Due Date
                                             </InputLabel>
-                                            <MuiPickersUtilsProvider utils={DateMomentUtils}>
+                                            {/* <MuiPickersUtilsProvider utils={DateMomentUtils}>
                                                 <DatePicker
                                                     clearable
+                                                    error={error}
                                                     id="date-picker"
                                                     format="YYYY-MM-DD"
                                                     label="Choose date"
@@ -219,15 +230,28 @@ export default function Main() {
                                                         <TextField {...params} helperText="Select Due Date" />
                                                     )}
                                                 />
-                                            </MuiPickersUtilsProvider>
+                                            </MuiPickersUtilsProvider> */}
+
+                                            <TextField
+                                                id="date-picker"
+                                                error={error}
+                                                required
+                                                format="YYYY-MM-DD"
+                                                type="date"
+                                                value={tasks_due_date}
+                                                placeholder=" Select Due Date"
+                                                onChange={(event) => {
+                                                    setTasks_due_date(event.target.value);
+                                                }}
+                                            />
                                         </Stack>
 
                                         {/* Categories*/}
                                         {/* Create a dropdown for categories*/}
                                         <Stack>
                                             <InputLabel>
-                                            Pick a Category (Optional)
-                                            <br></br>
+                                                Pick a Category (Optional)
+                                                <br></br>
                                             </InputLabel>
                                             <FormControl>
                                                 <Select
@@ -246,31 +270,10 @@ export default function Main() {
                                             </FormControl>
                                         </Stack>
 
-                                        {/* <Stack>
-                                            <InputLabel id="categoryName">
-                                                Category
-                                            </InputLabel><br></br>
-                                            <TextField
-                                                id="categoryName"
-                                                type="text"
-                                                placeholder=" Category Name"
-                                                onChange={(event) => {
-                                                    setTasks_categories(event.target.value);
-                                                }}
-                                            />
-                                        </Stack> */}
 
                                         {/* priority */}
                                         <Stack>
                                             <InputLabel id="priority">Priority Level (Optional) </InputLabel>
-                                            {/* For Testing Purposes
-                                                <TextField
-                                                InputProps={{readOnly: true}}
-                                                id="statusBox"
-                                                type="text"
-                                                value={tasks_priority}
-                                                variant="filled"
-                                            />*/}
                                             <Slider
                                                 aria-label="Restricted priorities"
                                                 defaultValue={5}
@@ -287,14 +290,6 @@ export default function Main() {
                                         {/* status */}
                                         <Stack alignItems="center">
                                             <InputLabel id="status">Status</InputLabel><br></br>
-                                            {/* For Testing Purposes
-                                                <TextField
-                                                InputProps={{readOnly: true}}
-                                                id="statusBox"
-                                                type="text"
-                                                value={tasks_status}
-                                                variant="filled"
-                                            />*/}
                                             <ButtonGroup
                                                 id="status_select"
                                                 value={tasks_status}
@@ -308,30 +303,16 @@ export default function Main() {
                                                 <Button variant={"contained"} value={"Active"}>Active</Button>
                                                 <Button disabled value={"Completed"}>Completed</Button>
                                             </ButtonGroup>
-
                                             <br></br>
                                         </Stack>
-
                                     </Stack>
-
-                                    {/* just testing out what a switch would look like */}
-                                    {/* <br></br>
-                                    <Stack direction="row" spacing={1} alignItems="flex-start">
-                                        <Typography value={"Completed"}>Completed</Typography>
-                                        <Switch 
-                                         defaultChecked onChange={(event) => {
-                                            setTasks_status(event.target.value);
-                                        }} />
-                                        <Typography value={"Active"}>Active</Typography>
-                                    </Stack> */}
                                 </Box >
+
                             </div >
                         </DialogContent>
 
                         <DialogActions>
-
                             <Button
-                                //onClick={handleClose}
                                 onClick={() => {
                                     handleClose();
                                     cancelReload();
@@ -342,16 +323,14 @@ export default function Main() {
                             </Button>
                             <Button
                                 variant="contained"
+                                height="75px"
                                 onClick={() => {
-                                    createTask();
-                                    handleClose();
-                                    handleNotify();
-                                    reload();
+                                    handleSubmit();
+
                                 }}
                             >
                                 <span class="material-icons">add</span>
                                 Add Task</Button>
-
                         </DialogActions>
                     </Dialog>
                 </div>
@@ -360,10 +339,7 @@ export default function Main() {
                 notify={notify}
                 setNotify={setNotify}
             />
-
-
         </>
-
     );
 
 }
