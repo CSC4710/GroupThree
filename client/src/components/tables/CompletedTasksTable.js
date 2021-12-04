@@ -141,7 +141,7 @@ export default function StickyHeadTable() {
                 <br></br>
                 <InputLabel id="demo-simple-select-label">Filter Tasks by Completion Date</InputLabel>
                 <br></br>
-                {/* <MuiPickersUtilsProvider utils={DateMomentUtils}>
+                <MuiPickersUtilsProvider utils={DateMomentUtils}>
                     <DatePicker
                         clearable
                         id="date-picker"
@@ -153,16 +153,18 @@ export default function StickyHeadTable() {
                             <TextField {...params} helperText="Select Due Date" />
                         )}
                     />
-                </MuiPickersUtilsProvider> */}
+                </MuiPickersUtilsProvider>
 
-                <TextField
+                {/* <TextField
                     id="date-picker"
                     format="YYYY-MM-DD"
                     type="date"
                     value={value}
                     placeholder=" Select Due Date"
-                    onChange={(newValue) => (newValue ? handleChange(newValue.format("YYYY-MM-DD")) : handleChange(null))}
-                />
+                    onChange={(newValue) => (newValue ? 
+                        handleChange(newValue.format("YYYY-MM-DD")) : handleChange(null)
+                        )}
+                /> */}
             </Box>
             <br></br>
 
