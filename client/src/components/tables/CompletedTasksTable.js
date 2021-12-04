@@ -54,27 +54,14 @@ export default function StickyHeadTable() {
     };
 
     //used for setting date
-    const [value, setValue] = React.useState(null);
+    const [value, setValue] = React.useState(new Date());
 
     const handleChange = (newValue) => {
         console.log(newValue);
         setValue(newValue);
         dueDateSelection(newValue);
-        handleCancel();
-        handleClear();
     };
 
-    // Handle cancel on date picker
-    const handleCancel = () => {
-        setValue(null);
-        window.location.reload();
-    };
-
-    // Handle clear on date picker
-    const handleClear = () => {
-        setValue(null);
-        window.location.reload();
-    };
 
     // Mechanism to filter a task by due date
     const dueDateSelection = (event) => {
@@ -154,7 +141,7 @@ export default function StickyHeadTable() {
                 <br></br>
                 <InputLabel id="demo-simple-select-label">Filter Tasks by Completion Date</InputLabel>
                 <br></br>
-                {/* <MuiPickersUtilsProvider utils={DateMomentUtils}>
+                <MuiPickersUtilsProvider utils={DateMomentUtils}>
                     <DatePicker
                         clearable
                         id="date-picker"
@@ -166,18 +153,18 @@ export default function StickyHeadTable() {
                             <TextField {...params} helperText="Select Due Date" />
                         )}
                     />
-                </MuiPickersUtilsProvider> */}
+                </MuiPickersUtilsProvider>
 
-                <TextField
+                {/* <TextField
                     id="date-picker"
                     format="YYYY-MM-DD"
                     type="date"
                     value={value}
                     placeholder=" Select Due Date"
-                    onChange={(event) => {
-                        handleChange(event.target.value);
-                    }}
-                />
+                    onChange={(newValue) => (newValue ? 
+                        handleChange(newValue.format("YYYY-MM-DD")) : handleChange(null)
+                        )}
+                /> */}
             </Box>
             <br></br>
 
