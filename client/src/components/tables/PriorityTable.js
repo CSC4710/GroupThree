@@ -11,6 +11,10 @@ import axios from "axios";
 import { MenuItem, Select, InputLabel } from "@mui/material";
 import Box from '@mui/material/Box';
 import "./PriorityTable.css";
+//import "../../pages/PriorityTable.css";
+//import "../../PriorityTable.css";
+
+
 
 
 // Create columns for id, description, due date, priority, category, status and actions
@@ -108,7 +112,7 @@ export default function StickyHeadTable() {
                         value={prioritySelection}
                         onChange={prioritySelection}
                         sx={{
-                            width: "300"
+                            width: "300px"
                         }}
                     >
                         <MenuItem value={"None"}>None</MenuItem>
@@ -122,8 +126,8 @@ export default function StickyHeadTable() {
 
             {/* // return setRows data to paper sx */}
             {/* Create a priority dropdown and get value for each value and display table based on what was picked */}
-            <Paper>
-                <TableContainer>
+            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+                <TableContainer sx={{ maxHeight: 860 }}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>
@@ -132,6 +136,7 @@ export default function StickyHeadTable() {
                                         key={column.id}
                                         align={column.align}
                                         style={{ minWidth: column.minWidth }}
+                                        actionsColumnIndex={-1}
                                     >
                                         {column.label}
                                     </TableCell>
@@ -163,8 +168,8 @@ export default function StickyHeadTable() {
                     count={rows.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
-                    onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
             <br></br>
@@ -174,4 +179,3 @@ export default function StickyHeadTable() {
         </>
     );
 }
-
