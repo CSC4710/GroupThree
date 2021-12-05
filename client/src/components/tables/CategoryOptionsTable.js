@@ -122,6 +122,9 @@ export default function StickyHeadTable() {
                         id="categories"
                         value={categorySelection}
                         onChange={categorySelection}
+                        sx={{
+                            width: "300px"
+                        }}
                     >
                         <MenuItem value="None">None</MenuItem>
                         {categories.map((category) => (
@@ -133,8 +136,8 @@ export default function StickyHeadTable() {
             </div>
 
             {/* // return setRows data to paper sx */}
-            <Paper>
-                <TableContainer>
+            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+                <TableContainer sx={{ maxHeight: 860 }}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>
@@ -142,7 +145,9 @@ export default function StickyHeadTable() {
                                     <TableCell
                                         key={column.id}
                                         align={column.align}
-                                        style={{ minWidth: column.minWidth }}
+                                        style={{ minWidth: column.minWidth
+                                         }}
+                                         actionsColumnIndex={-1}
                                     >
                                         {column.label}
                                     </TableCell>
@@ -174,8 +179,8 @@ export default function StickyHeadTable() {
                     count={rows.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
-                    onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
             <br></br>
@@ -186,4 +191,3 @@ export default function StickyHeadTable() {
         </>
     );
 }
-
