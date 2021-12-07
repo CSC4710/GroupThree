@@ -71,6 +71,9 @@ Each task consists of:
    /api/updateCategory/:Categories_id
    /api/deleteTask/:Tasks_id
    /api/deleteCategory/:Categories_id
-   ```   
+   ``` 
+ ## Furture Functionality 
+- The cuurent version of our app is released as a full functioning platform, but due to time constraints more advanced features will be implemented in future versions. Future version would have a login feature which would allow the user to save their data and keep track of their individual tasks. This feature would also increase the usablilty of the website
+
 
 
